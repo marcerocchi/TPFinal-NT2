@@ -10,7 +10,7 @@
       <!-- CAMPO TITULO -->
       <!-- ------------ -->
       <div class="form-group">
-        <label for="titulo"><u>Titulo</u></label>
+        <label for="titulo"><h4>Titulo</h4></label>
         <input 
           type="text"
           id="titulo"
@@ -28,7 +28,7 @@
       <!--  CAMPO DESCRIPCIÓN  -->
       <!-- ------------------- -->
       <div class="form-group">
-        <label for="descripcion"><u>Descripción</u></label>
+        <label for="descripcion"><h4>Descripción</h4></label>
         <textarea 
           name="descripcion"
           id="descripcion"
@@ -46,7 +46,7 @@
       <!-- CAMPO CATEGORIA  -->
       <!-- ---------------- -->
       <div class="form-group">
-        <label><u>Categoria</u></label>
+        <label><h4>Categoria</h4></label>
         <select class="form-control mb-1" v-model="v.f.categoria.$model">
           <option value="administrativa">Administrativa</option>
           <option value="experiencia">Experiencia</option>
@@ -67,7 +67,7 @@
           id="publicar"
           type="submit"
           :disabled="v.$invalid"
-          class="btn btn-success mt-4"
+          class="btn btn-dark"
           value="Publicar"
         >
         
@@ -78,7 +78,7 @@
           id="cancelar"
           type="button"
           @click="cancelar()"
-          class="btn btn-danger mt-4"
+          class="btn btn-light"
           value="Cancelar"
         >
       </div>
@@ -173,9 +173,9 @@
     display: inline;
   }
   #cancelar {
-    text-align: right;
+    text-align: center;
   }
   #publicar {
-    text-align: left;
+    text-align: center;
   }
 </style>

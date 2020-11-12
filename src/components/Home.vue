@@ -1,33 +1,36 @@
 <template>
   <div class="jumbotron">
-    <h1 id="titulo"><u><b>RepORT</b></u></h1>
-
     <!-- ------------------ -->
     <!-- Temas de discusión -->
     <!-- ------------------ -->
     <div id="encabezado">
-      <h2>Temas de discusión</h2>
       <button id="crearTema" class="btn btn-primary" @click="crearTema()">Crear tema <b>+</b></button>
+      <h2>Temas de discusión</h2>
     </div>
     <hr />
     <div v-if="temas.length">
-      <table class="table table-dark"> 
-        <tr :style="{color:'cornflowerblue'}">
-          <th scope="col">Titulo</th>
-          <th scope="col">Descripcion</th>
-          <th scope="col">Categoria</th>
-          <th scope="col">Fecha de creación</th>
-        </tr>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr :style="{color:'NAVY'}">
+            <th scope="col">Titulo</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Fecha de creación</th>
+          </tr>
+        </thead>
         <tr v-for="(tema, index) in temas" :key="index">
           <td scope="col"> <a><b>{{ tema.titulo }}</b></a> </td>
           <td scope="col"> <p>{{ tema.descripcion }}</p> </td>
           <td scope="col"> <p>{{ pasarAMayuscula(tema.categoria) }}</p> </td>
           <td scope="col"> <p>{{ formatearFechaHora(tema.createdAt) }}</p> </td>                   
-          <td scope="col"> <button id="verTema" class="btn btn-success" @click="verTema(tema.id)">Ir al tema</button> </td>
+          <td scope="col"> <button id="verTema" class="btn btn-dark" @click="verTema(tema.id)">Ir al tema</button> </td>
         </tr>
       </table>
     </div>
-    <div v-else class="alert alert-warning"> <h5>No hay temas de discusión creados</h5> </div>
+    <div v-if ="!temas.length && !pidiendo" class="alert alert-warning"> <h5>No hay temas de discusión creados</h5> </div>
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:Diego Chiaradia
+     , Paulina Sigal, Federico Camelino, Nicolas Meller, Marcelo Rocchi
+    </div>
   </div>
 </template>
 
@@ -46,6 +49,7 @@
     data () {
       return {
         temas: [],
+        pidiendo: true,
         url: 'https://5f92eb01eca67c001640a201.mockapi.io/temas'
       }
     },
@@ -71,8 +75,12 @@
           let res = await this.axios(this.url)
           this.temas = res.data
           console.log(res.data)
-        } catch(error) {
+        } 
+        catch(error) {
           console.log('HTTP GET ERROR', error)
+        }
+        finally {
+          this.pidiendo = false
         }
       },
     },
@@ -83,9 +91,6 @@
 </script>
 
 <style scoped lang="css">
-  #titulo {
-   text-align: center;
-  }
   #encabezado {
     display: inline;
   }

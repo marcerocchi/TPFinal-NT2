@@ -1,5 +1,4 @@
 <template>
-  <!-- Debe recibir por prop "idTema" -->
   <div class="jumbotron">
     <form novalidate autocomplete="off" @submit.prevent="enviar()">
       <!-- ------------------- -->
@@ -8,7 +7,7 @@
       <div class="form-group">
         <label for="Comentario"><u>Descripción</u></label>
         <textarea 
-          type="text"
+          name="descripcion"
           id="descripcion"
           class="form-control"
           rows="6"
@@ -22,48 +21,47 @@
         </div>
         
         <div id="botones" class="form-group">
-        <!-- --------------- -->
-        <!-- BOTÓN ENVIAR  -->
-        <!-- --------------- -->
-        <input
-          id="enviar"
-          type="submit"
-          :disabled="v.$invalid"
-          class="btn btn-success mt-4"
-          value="Enviar"
-        >
+          <!-- --------------- -->
+          <!-- BOTÓN ENVIAR  -->
+          <!-- --------------- -->
+          <input
+            id="enviar"
+            type="submit"
+            :disabled="v.$invalid"
+            class="btn btn-success mt-4"
+            value="Enviar"
+          >
         
-        <!-- --------------- -->
-        <!-- BOTÓN CANCELAR  -->
-        <!-- --------------- -->
-        <input
-          id="cancelar"
-          type="button"
-          @click="cancelar()"
-          class="btn btn-danger mt-4"
-          value="Cancelar"
-        >
+          <!-- --------------- -->
+          <!-- BOTÓN CANCELAR  -->
+          <!-- --------------- -->
+          <input
+            id="cancelar"
+            type="button"
+            @click="cancelar()"
+            class="btn btn-danger mt-4"
+            value="Cancelar"
+          >
+        </div>
       </div>
-      </div>
-    
     </form>
   </div>
 </template>
 
 <script>
-  import { required, maxLength} from '@vuelidate/validators'
+  import { required, minLength, maxLength} from '@vuelidate/validators'
   import { reactive } from 'vue'
   import { useVuelidate } from '@vuelidate/core'
 
   export default  {
     name: 'src-components-crear-comentario',
-    props: ['idTema'],
+    props: ['temaID', 'botonCrear'],
     mounted () {
 
     },
     setup () {
       const f = reactive({
-        temaID: idTema,
+        IdTema: this.temaID,
         descripcion: '',
         usuario: ''
       })
@@ -111,7 +109,7 @@
       cancelar() {
         this.resetForm()
         this.v.$reset()
-        //DEBERIA CERRAR EL AREA DE TEXTO
+        //this.botonCrear = !this.botonCrear
       },
       /* Reset de valores iniciales de los campos de datos del formulario */
       resetForm() {
@@ -121,7 +119,6 @@
       setUsuario() {
         this.f.usuario = this.$store.state.user
       }
-
     },
     computed: {
 

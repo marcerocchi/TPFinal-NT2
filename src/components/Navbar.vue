@@ -1,7 +1,9 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+    <nav>
       <router-link to="/">
-        <a class="navbar-brand" href="#">Home</a>
+        <center>
+        <img src="../assets/LogoRepORT.png" >
+        </center>
       </router-link>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

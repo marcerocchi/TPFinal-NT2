@@ -12,13 +12,13 @@
 
   export default  {
     name: 'src-components-ver-comentario',
-    props: [],
+    props: ['temaID'],
     mounted () {
 
     },
     data () {
       return {
-
+        url: 'https://5f92eb01eca67c001640a201.mockapi.io/comentarios'
       }
     },
     methods: {
