@@ -7,7 +7,8 @@ import VerTema from '../components/VerTema.vue'
 const routes = [
     { path: '/', name: 'Home', component: Home },
     { path: '/creartema', name: 'CrearTema', component: CrearTema },
-    { path: '/vertema', name: 'VerTema', component: VerTema }
+    { path: '/vertema/:temaID', name: 'VerTema', component: VerTema, props: true },
+    { path: '/:catchAll(.*)', name: 'NotFound', component: Home } //Routers desconocidos
 ]
 
 const router = createRouter({

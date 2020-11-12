@@ -23,28 +23,20 @@
           <td scope="col"> <p>{{ tema.descripcion }}</p> </td>
           <td scope="col"> <p>{{ pasarAMayuscula(tema.categoria) }}</p> </td>
           <td scope="col"> <p>{{ formatearFechaHora(tema.createdAt) }}</p> </td>                   
-          <td scope="col"> <button id="verTema" class="btn btn-success" @click="verTema()">Ir al tema</button> </td>
+          <td scope="col"> <button id="verTema" class="btn btn-success" @click="verTema(tema.id)">Ir al tema</button> </td>
         </tr>
       </table>
     </div>
     <div v-else class="alert alert-warning"> <h5>No hay temas de discusión creados</h5> </div>
-
-    <!-- Solo a modo de presentación -->
-    <CrearTema />
-    <VerTema />
   </div>
 </template>
 
 <script>
-  import CrearTema from './CrearTema.vue'
-  import VerTema from './VerTema.vue'
   import filters from '../filters'
 
   export default  {
     name: 'src-components-home',
     components: {
-      CrearTema,
-      VerTema
     },
     props: [],
     mixins: [filters],
@@ -60,10 +52,18 @@
     methods: {
       crearTema() {
         //this.$router.push('/creartema')
-        this.$router.push({ path: 'creartema' })
+        this.$router.push({ path: '/creartema' })
+        console.log("Entro al crear tema")
       },
-      verTema() {
-        this.$router.push('/vertema')
+      verTema(id) {
+        //this.$router.push('/vertema')
+        this.$router.push({
+          name: 'VerTema',
+          params: {
+            temaID: id
+          }
+        })
+        console.log(id)
       },
       /* Pedido de datos almacenados en MockAPI */
       async getTemasFormAxios() {

@@ -7,16 +7,16 @@ export default createStore({
         }
     },
     actions: {
-        /* contarUp({commit}, cant) {
-            commit('incrementar',cant)
+        /* userActual({commit}, usuario) {
+            commit('definirUser', usuario)
         },
         contarDown({commit}, cant) {
             commit('decrementar',cant)
         } */
     },
     mutations: {
-        /* incrementar(state,cant) {
-            state.contador += cant
+        /* definirUser(state, usuario) {
+            state.user = usuario
         },
         decrementar(state,cant) {
             state.contador -= cant

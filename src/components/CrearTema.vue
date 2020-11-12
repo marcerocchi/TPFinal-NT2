@@ -30,7 +30,7 @@
       <div class="form-group">
         <label for="descripcion"><u>Descripción</u></label>
         <textarea 
-          type="text"
+          name="descripcion"
           id="descripcion"
           class="form-control"
           rows="6"
