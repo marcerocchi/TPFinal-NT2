@@ -4,7 +4,7 @@ export default {
             return value.toUpperCase()
         },
         formatearFechaHora(fyh) {
-            return new Date(fyh).toLocaleString()
+            return new Date(fyh).toLocaleDateString()
         }
     }
 }

@@ -1,6 +1,8 @@
 <template>
-  <div id="app" class="container-fluid mt-3">
-    <Navbar />
+  <div id="app" class="container-fluid mt-3"> 
+    <div v-if="usuarioLogueado">
+      <Navbar />
+    </div>
     <router-view />
   </div>
 </template>
@@ -12,6 +14,11 @@
     name: 'App',
     components: {
       Navbar
+    },
+    computed: {
+      usuarioLogueado() {
+        return this.$store.state.userLogueado
+      }
     }
   }
 </script>

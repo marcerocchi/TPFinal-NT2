@@ -1,0 +1,151 @@
+<template>
+  <div>
+    <h2>
+      <b>Bienvenido a RepORT [CAMBIAR POR IMAGEN DISEÑADA]</b>
+    </h2>
+    <br>
+    <form novalidate autocomplete="off" @submit.prevent="validarCredenciales()">
+      <!-- ------------- -->
+      <!-- CAMPO USUARIO -->
+      <!-- ------------- -->
+      <div class="form-group">
+        <label for="usuario"><h6>Usuario</h6></label>
+        <input 
+          type="text"
+          id="usuario"
+          class="form-control"
+          v-model="v.f.usuario.$model"
+        >
+        <!-- CARTELES DE VALIDACIÓN -->
+        <div v-if="v.f.usuario.$error && v.f.usuario.$dirty" class="alert alert-danger mt-1">
+          <div v-if="v.f.usuario.required.$invalid">Este campo es requerido</div>
+        </div>
+      </div>
+
+      <!-- ------------------ -->
+      <!--  CAMPO CONTRASEÑA  -->
+      <!-- ------------------ -->
+      <div class="form-group">
+        <label for="password"><h6>Contraseña</h6></label>
+        <input 
+          type="text"
+          id="password"
+          class="form-control"
+          v-model="v.f.password.$model"
+        >
+        <!-- CARTELES DE VALIDACIÓN -->
+        <div v-if="v.f.password.$error && v.f.password.$dirty" class="alert alert-danger mt-1">
+          <div v-if="v.f.password.required.$invalid">Este campo es requerido</div>
+        </div>
+      </div>
+      <div v-if="usuarioValido==false" class="alert alert-danger mt-1">Usuario y/o Contraseña inválido</div>
+        
+      <div class="text" align="center">   
+        <!-- --------------- -->
+        <!-- BOTÓN INGRESAR  -->
+        <!-- --------------- -->
+        <input
+          id="ingresar"
+          type="submit"
+          :disabled="v.$invalid"
+          class="btn btn-dark"
+          value="Ingresar"
+        >
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+  import { required} from '@vuelidate/validators'
+  import { reactive } from 'vue'
+  import { useVuelidate } from '@vuelidate/core'
+
+  export default  {
+    name: 'src-components-login',
+    props: [],
+    setup () {
+      const f = reactive({
+        usuario: '',
+        password: ''
+      })
+      const rules = {
+        f: {
+          usuario: { 
+            required,
+          },
+          password: { 
+            required
+          }
+        }
+      }
+      const v = useVuelidate(rules, { f })
+      return { f,v }
+    },
+    mounted () {
+    },    
+    data () {
+      return {
+        userObtenido: [],
+        usuarios: [],
+        usuarioValido: undefined,
+        url : 'https://5f92eb01eca67c001640a201.mockapi.io/usuarios'
+      }
+    },
+    methods: {
+      /* Pedido de datos almacenados en MockAPI */
+      async getUsuariosFormAxios() {
+        try {
+          let res = await this.axios(this.url)
+          this.usuarios = res.data
+          console.log(res.data)
+        }
+        catch(error) {
+          console.log('HTTP GET ERROR', error)
+        }
+      },
+      async validarCredenciales() {
+        this.v.$touch()
+        if(!this.v.$invalid) {
+          await this.getUsuariosFormAxios()
+          console.log(this.usuarios)
+          this.userObtenido = this.usuarios.filter(user => (user.usuario == this.f.usuario))
+          console.log(this.userObtenido)
+          if (this.userObtenido.length!=0) {
+            if (this.userObtenido[0].password === this.f.password) {
+              this.$router.push({ path: 'Home' })
+              this.usuarioValido = true
+              this.definirUsuario(this.userObtenido[0])
+            }
+            else {
+              this.usuarioValido = false
+            }
+          }
+          else {
+            this.usuarioValido = false
+          }
+        }
+        this.resetForm()
+        this.v.$reset()
+      },
+      /* Reset de valores iniciales de los campos de datos del formulario */
+      resetForm() {
+        this.v.f.usuario.$model = ''
+        this.v.f.password.$model = ''
+      },
+      /* Define el nombre de usuario tomándolo de la instancia global de Vuex */
+      definirUsuario(user) {
+        this.$store.dispatch('userActual', user.usuario)
+        this.$store.dispatch('avatarActual', user.avatar)
+        this.$store.dispatch('usuarioLogueado', true)
+        //console.log(user.avatar)
+      }
+    }
+  }
+</script>
+
+<style scoped lang="css">
+  .src-components-login {
+
+  }
+</style>

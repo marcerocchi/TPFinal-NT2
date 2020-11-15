@@ -60,27 +60,30 @@
       </div>
       
       <div id="botones" class="form-group">
-        <!-- --------------- -->
-        <!-- BOTÓN PUBLICAR  -->
-        <!-- --------------- -->
-        <input
-          id="publicar"
-          type="submit"
-          :disabled="v.$invalid"
-          class="btn btn-dark"
-          value="Publicar"
-        >
-        
-        <!-- --------------- -->
-        <!-- BOTÓN CANCELAR  -->
-        <!-- --------------- -->
-        <input
-          id="cancelar"
-          type="button"
-          @click="cancelar()"
-          class="btn btn-light"
-          value="Cancelar"
-        >
+        <div class="text" align="center">   
+          <!-- --------------- -->
+          <!-- BOTÓN PUBLICAR  -->
+          <!-- --------------- -->
+          <input
+            id="publicar"
+            type="submit"
+            :disabled="v.$invalid"
+            class="btn btn-dark"
+            value="Publicar"
+          >
+          &nbsp;
+          &nbsp;
+          <!-- --------------- -->
+          <!-- BOTÓN CANCELAR  -->
+          <!-- --------------- -->
+          <input
+            id="cancelar"
+            type="button"
+            @click="cancelar()"
+            class="btn btn-light"
+            value="Cancelar"
+          >
+        </div>
       </div>
     </form>
   </div>
@@ -146,13 +149,14 @@
           await this.sendDatosFormAxios(form)
           this.resetForm()
           this.v.$reset()
+          this.$router.push({ path: 'Home' })  
         }
       },
       /* Cancelar la creación de un nuevo tema */
       cancelar() {
         this.resetForm()
         this.v.$reset()
-        this.$router.push('/')
+        this.$router.push({ path: 'Home' })
       },
       /* Reset de valores iniciales de los campos de datos del formulario */
       resetForm() {
@@ -171,11 +175,5 @@
 <style scoped lang="css">
   #botones {
     display: inline;
-  }
-  #cancelar {
-    text-align: center;
-  }
-  #publicar {
-    text-align: center;
   }
 </style>
