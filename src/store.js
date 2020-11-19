@@ -5,7 +5,9 @@ export default createStore({
         return {
             userLogueado: false,
             user: '',
-            avatar: ''
+            avatar: '',
+            usuarios: [],
+            comentarios: []
         }
     },
     actions: {
@@ -17,10 +19,16 @@ export default createStore({
         },
         usuarioLogueado({commit}, login) {
             commit('accesoUsuario', login)
+        },
+        guardarUsuarios({commit}, usuarios) {
+            commit('guardarUsuarios', usuarios)
+        },
+        guardarComentarios({commit}, comentarios) {
+            commit('guardarComentarios', comentarios)
+        },
+        agregarComentario({commit}, comentario) {
+            commit('agregarComentario', comentario)
         }
-        /* contarDown({commit}, cant) {
-            commit('decrementar',cant)
-        } */
     },
     mutations: {
         definirUser(state, usuario) {
@@ -33,9 +41,16 @@ export default createStore({
             state.userLogueado = login
             console.log(login)
             console.log(state.userLogueado)
+        },
+        guardarUsuarios(state, usuarios) {
+            state.usuarios = usuarios
+        },
+        guardarComentarios(state, comentarios) {
+            state.comentarios = comentarios
+        },
+        agregarComentario(state, comentario) {
+            state.comentarios.push(comentario)
         }
-        /* decrementar(state,cant) {
-            state.contador -= cant
-        } */
+
     }
 })

@@ -36,7 +36,7 @@
       </table>
     </div>
     <div v-if ="!temas.length && !pidiendo" class="alert alert-warning"> <h5>No hay temas de discusión creados</h5> </div>
-    <div v-if="!temasFiltrados.length && !pidiendo" class="alert alert-warning"> <h5>No hay coincidencias</h5> </div>
+    <div v-if="!temasFiltrados.length && !pidiendo && temas.length" class="alert alert-warning"> <h5>No hay coincidencias</h5> </div>
     <div class="footer-copyright text-center py-3">© 2020 Copyright: Diego Chiaradia
       , Paulina Sigal, Federico Camelino, Nicolas Meller, Marcelo Rocchi
     </div>

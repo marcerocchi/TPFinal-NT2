@@ -1,10 +1,14 @@
 <template>
   <div class="jumbotron">
-    <h3>{{ tema.titulo }}</h3>
-    <p>{{ tema.descripcion }}</p>
-    <p>{{ formatearFechaHora(tema.createdAt) }}</p>
-    <p>Creador: {{ tema.usuario }}</p>
-    
+    <h3><b>{{ tema.titulo }}</b></h3>
+    &nbsp;
+    <p><u>Fecha de creación:</u> {{ formatearFechaHora(tema.createdAt) }}</p>
+    <p><u>Creador:</u> <b>{{ tema.usuario }}</b></p>
+    <div align="center">
+      <h3>"{{ tema.descripcion }}"</h3>
+    </div>
+    &nbsp;
+    &nbsp;
     <!-- Ver lista de Comentarios -->
     <VerComentario :temaID="temaID" />
     
@@ -110,7 +114,7 @@
         temas: [],
         tema: [],
         verNewComentario: false,
-        urlTemas: 'https://5f92eb01eca67c001640a201.mockapi.io/temas',
+        urlTemas: 'https://5f92eb01eca67c001640a201.mockapi.io/temas/',
         urlComentarios: 'https://5f92eb01eca67c001640a201.mockapi.io/comentarios'
       }
     },
@@ -131,6 +135,7 @@
       async sendDatosFormAxios(datos) {
         try {
           let res = await this.axios.post(this.urlComentarios, datos, {'content-type': 'application/json'})
+          this.$store.dispatch('agregarComentario', res.data)
           console.log(res.data)
         }
         catch(error) {
@@ -148,8 +153,7 @@
           await this.sendDatosFormAxios(form)
           this.resetForm()
           this.v.$reset()
-          this.verNewComentario = !this.verNewComentario
-          location.reload()
+          this.verNewComentario = false
         }
       },
       /* Cancelar la creación de un nuevo tema */
@@ -175,5 +179,8 @@
 </script>
 
 <style scoped lang="css">
-  
+
+  #borrar {
+    float: right;
+  }
 </style>

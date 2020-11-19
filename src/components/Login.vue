@@ -1,45 +1,48 @@
 <template>
   <div>
-    <h2>
-      <b>Bienvenido a RepORT [CAMBIAR POR IMAGEN DISEÑADA]</b>
-    </h2>
+    <div align="center">
+      <img src="../assets/LogoRepORT.png" width="1100" height="130">
+    </div>
     <br>
     <form novalidate autocomplete="off" @submit.prevent="validarCredenciales()">
       <!-- ------------- -->
       <!-- CAMPO USUARIO -->
       <!-- ------------- -->
-      <div class="form-group">
-        <label for="usuario"><h6>Usuario</h6></label>
+      <div class="form-group" align="center">
+        <label for="usuario"><h6><b>Usuario</b></h6></label>
         <input 
           type="text"
           id="usuario"
           class="form-control"
           v-model="v.f.usuario.$model"
+          style="width:500px"
         >
         <!-- CARTELES DE VALIDACIÓN -->
-        <div v-if="v.f.usuario.$error && v.f.usuario.$dirty" class="alert alert-danger mt-1">
+        <div v-if="v.f.usuario.$error && v.f.usuario.$dirty" class="alert alert-danger mt-1" align="center" style="width:500px">
           <div v-if="v.f.usuario.required.$invalid">Este campo es requerido</div>
         </div>
       </div>
+      &nbsp;
 
       <!-- ------------------ -->
       <!--  CAMPO CONTRASEÑA  -->
       <!-- ------------------ -->
-      <div class="form-group">
-        <label for="password"><h6>Contraseña</h6></label>
+      <div class="form-group" align="center">
+        <label for="password"><h6><b>Contraseña</b></h6></label>
         <input 
-          type="text"
+          type="password"
           id="password"
           class="form-control"
           v-model="v.f.password.$model"
+          style="width:500px"
         >
         <!-- CARTELES DE VALIDACIÓN -->
-        <div v-if="v.f.password.$error && v.f.password.$dirty" class="alert alert-danger mt-1">
+        <div v-if="v.f.password.$error && v.f.password.$dirty" class="alert alert-danger mt-1" align="center" style="width:500px">
           <div v-if="v.f.password.required.$invalid">Este campo es requerido</div>
         </div>
       </div>
-      <div v-if="usuarioValido==false" class="alert alert-danger mt-1">Usuario y/o Contraseña inválido</div>
-        
+      <div v-if="usuarioValido==false" class="alert alert-danger mt-1" align="center">Usuario y/o Contraseña inválida</div>
+      
       <div class="text" align="center">   
         <!-- --------------- -->
         <!-- BOTÓN INGRESAR  -->
@@ -51,6 +54,12 @@
           class="btn btn-dark"
           value="Ingresar"
         >
+      </div>
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <div align="center">
+        <router-link to="/registro">¿No tienes cuenta? Crea una</router-link>
       </div>
     </form>
   </div>
@@ -139,6 +148,9 @@
         this.$store.dispatch('avatarActual', user.avatar)
         this.$store.dispatch('usuarioLogueado', true)
         //console.log(user.avatar)
+      },
+      registrarUsuario() {
+        this.$router.push({ path: 'Registro'})
       }
     }
   }

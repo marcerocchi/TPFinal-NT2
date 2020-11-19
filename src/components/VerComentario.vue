@@ -14,6 +14,7 @@
           <td scope="col"> <p>{{ comentario.descripcion }}</p> </td>
           <td scope="col"> <a>{{ comentario.usuario }}</a> </td>
           <td scope="col"> <p>{{ formatearFechaHora(comentario.createdAt) }}</p> </td>
+          <td scope="col"> <button v-if="comentario.usuario == this.$store.state.user" class="btn btn-danger m-3" @click="deleteComentarioAxios(comentario.id)">Borrar</button> </td>
         </tr>
       </table>
     </div>
@@ -37,12 +38,12 @@
       return {
         comentarios: [],
         pidiendo: true,
-        url: 'https://5f92eb01eca67c001640a201.mockapi.io/comentarios'
+        url: 'https://5f92eb01eca67c001640a201.mockapi.io/comentarios/'
       }
     },
     methods: {
       /* Pedido de datos almacenados en MockAPI */
-      async getComentariosFormAxios() {
+      /* async getComentariosFormAxios() {
         try {
           let res = await this.axios(this.url)
           console.log(res.data)
@@ -55,7 +56,33 @@
         finally {
           this.pidiendo = false
         }
-      }
+      }, */
+      async getComentariosFormAxios() {
+        try {
+          let res = await this.axios(this.url)
+          this.comentarios = res.data.filter(valor => valor.idTema == this.temaID)
+          this.$store.dispatch('guardarComentarios', this.comentarios)
+          console.log(this.comentarios)
+        }
+        catch(error) {
+          console.log('HTTP GET ERROR', error)
+        }
+        finally {
+          this.pidiendo = false
+        }
+      },
+      deleteComentarioAxios(id) {
+        console.log('delete',id)
+        this.axios.delete(this.url+id)
+          .then(res => {
+            let comentario = res.data
+            console.log(comentario)
+            let offset = this.comentarios.findIndex(comentario => comentario.id == id)
+            this.comentarios.splice(offset,1)
+          })
+          .catch(error => console.log('HTTP DELETE ERROR', error))
+      },
+
     }
 }
 
