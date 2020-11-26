@@ -41,8 +41,15 @@
           <div v-if="v.f.password.required.$invalid">Este campo es requerido</div>
         </div>
       </div>
-      <div v-if="usuarioValido==false" class="alert alert-danger mt-1" align="center">Usuario y/o Contraseña inválida</div>
-      
+
+      <div class="form-group" align="center">
+        <div v-if="!v.f.usuario.$dirty || !v.f.password.$dirty">
+          <div v-if="usuarioValido==false" class="alert alert-danger mt-1" align="center" style="width:500px">Usuario y/o Contraseña inválida</div>
+          <div v-if="campoVacio==true" class="alert alert-danger mt-1" align="center" style="width:500px">Se debe completar ambos campos</div>
+        </div>
+      </div>
+
+        
       <div class="text" align="center">   
         <!-- --------------- -->
         <!-- BOTÓN INGRESAR  -->
@@ -98,6 +105,7 @@
         userObtenido: [],
         usuarios: [],
         usuarioValido: undefined,
+        campoVacio: undefined,
         url : 'https://5f92eb01eca67c001640a201.mockapi.io/usuarios'
       }
     },
@@ -114,28 +122,31 @@
         }
       },
       async validarCredenciales() {
-        this.v.$touch()
-        if(!this.v.$invalid) {
-          await this.getUsuariosFormAxios()
-          console.log(this.usuarios)
-          this.userObtenido = this.usuarios.filter(user => (user.usuario == this.f.usuario))
-          console.log(this.userObtenido)
-          if (this.userObtenido.length!=0) {
-            if (this.userObtenido[0].password === this.f.password) {
-              this.$router.push({ path: 'Home' })
-              this.usuarioValido = true
-              this.definirUsuario(this.userObtenido[0])
+        if (this.v.f.usuario.$model == '' || this.v.f.password.$model == '') this.campoVacio = true
+        else {
+          this.v.$touch()
+          if(!this.v.$invalid) {
+            await this.getUsuariosFormAxios()
+            console.log(this.usuarios)
+            this.userObtenido = this.usuarios.filter(user => (user.usuario == this.f.usuario))
+            console.log(this.userObtenido)
+            if (this.userObtenido.length!=0) {
+              if (this.userObtenido[0].password === this.f.password) {
+                this.$router.push({ path: 'Home' })
+                this.usuarioValido = true
+                this.definirUsuario(this.userObtenido[0])
+              }
+              else {
+                this.usuarioValido = false
+              }
             }
             else {
               this.usuarioValido = false
             }
           }
-          else {
-            this.usuarioValido = false
-          }
+          this.resetForm()
+          this.v.$reset()
         }
-        this.resetForm()
-        this.v.$reset()
       },
       /* Reset de valores iniciales de los campos de datos del formulario */
       resetForm() {
@@ -145,6 +156,8 @@
       /* Define el nombre de usuario tomándolo de la instancia global de Vuex */
       definirUsuario(user) {
         this.$store.dispatch('userActual', user.usuario)
+        this.$store.dispatch('nombreActual', user.nombre)
+        this.$store.dispatch('apellidoActual', user.apellido)
         this.$store.dispatch('avatarActual', user.avatar)
         this.$store.dispatch('usuarioLogueado', true)
         //console.log(user.avatar)

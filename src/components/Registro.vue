@@ -84,7 +84,7 @@
           <!-- CARTELES DE VALIDACIÓN -->
           <div v-if="v.f.password.$error && v.f.password.$dirty" class="alert alert-danger mt-1">
             <div v-if="v.f.password.required.$invalid">Este campo es requerido</div>
-            <div v-if="v.f.password.minLength.$invalid">Este campo debe tener como máximo {{v.f.password.minLength.$params.min}} caracteres</div>
+            <div v-if="v.f.password.minLength.$invalid">Este campo debe tener como mínimo {{v.f.password.minLength.$params.min}} caracteres</div>
             <div v-if="v.f.password.conEspacios.$invalid">No se permiten espacios en este campo</div>
           </div>
         </div>
@@ -115,7 +115,9 @@
             >
           </div>
         </div>
-        <div v-if="usuarioValido==false" class="alert alert-danger mt-1" align="center">El nombre de usuario ya existe</div>
+        <div class="form-group" align="center">
+          <div v-if="usuarioValido==false" class="alert alert-danger mt-1" align="center" style="width:700px">El nombre de usuario ya existe</div>
+        </div>
       </form>
     </div>
   </div>
@@ -132,7 +134,7 @@
   }
   
   function validarNumeros(value) {
-    return isNaN(value)
+    return isNaN(value) 
   }
 
   export default  {
@@ -222,9 +224,8 @@
           }
           else {
             this.usuarioValido = false
-            this.v.f.usuario.$model = ''
-          } 
-            
+            /* this.v.f.usuario.$model = '' -> Se podria vaciar este campo si user existe */
+          }
         }
       },
       validarUsuario(value) {

@@ -5,6 +5,8 @@ export default createStore({
         return {
             userLogueado: false,
             user: '',
+            name: '',
+            lastName: '',
             avatar: '',
             usuarios: [],
             comentarios: []
@@ -13,6 +15,12 @@ export default createStore({
     actions: {
         userActual({commit}, usuario) {
             commit('definirUser', usuario)
+        },
+        nombreActual({commit}, nombre) {
+            commit('definirNombre', nombre)
+        },
+        apellidoActual({commit}, apellido) {
+            commit('definirApellido', apellido)
         },
         avatarActual({commit}, imagen) {
             commit('definirAvatar', imagen)
@@ -28,11 +36,20 @@ export default createStore({
         },
         agregarComentario({commit}, comentario) {
             commit('agregarComentario', comentario)
+        },
+        borrarComentario({commit}, id) {
+            commit('borrarComentario', id)
         }
     },
     mutations: {
         definirUser(state, usuario) {
             state.user = usuario
+        },
+        definirNombre(state, nombre) {
+            state.name = nombre
+        },
+        definirApellido(state, apellido) {
+            state.lastName = apellido
         },
         definirAvatar(state, imagen) {
             state.avatar = imagen
@@ -50,6 +67,10 @@ export default createStore({
         },
         agregarComentario(state, comentario) {
             state.comentarios.push(comentario)
+        },
+        borrarComentario(state, id) {
+            let offset = state.comentarios.findIndex(comentario => comentario.id == id)
+            state.comentarios.splice(offset,1)
         }
 
     }
