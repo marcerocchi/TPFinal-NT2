@@ -99,36 +99,27 @@
       return { f,v }
     },
     mounted () {
+      this.getUsuariosFormAxios()
     },    
     data () {
       return {
         userObtenido: [],
-        usuarios: [],
         usuarioValido: undefined,
-        campoVacio: undefined,
-        url : 'https://5f92eb01eca67c001640a201.mockapi.io/usuarios'
+        campoVacio: undefined
       }
     },
     methods: {
       /* Pedido de datos almacenados en MockAPI */
       async getUsuariosFormAxios() {
-        try {
-          let res = await this.axios(this.url)
-          this.usuarios = res.data
-          console.log(res.data)
-        }
-        catch(error) {
-          console.log('HTTP GET ERROR', error)
-        }
+        this.$store.dispatch('getUsuariosAxios')
       },
       async validarCredenciales() {
         if (this.v.f.usuario.$model == '' || this.v.f.password.$model == '') this.campoVacio = true
         else {
           this.v.$touch()
           if(!this.v.$invalid) {
-            await this.getUsuariosFormAxios()
-            console.log(this.usuarios)
-            this.userObtenido = this.usuarios.filter(user => (user.usuario == this.f.usuario))
+            console.log(this.$store.state.usuarios)
+            this.userObtenido = this.$store.state.usuarios.filter(user => (user.usuario == this.f.usuario))
             console.log(this.userObtenido)
             if (this.userObtenido.length!=0) {
               if (this.userObtenido[0].password === this.f.password) {

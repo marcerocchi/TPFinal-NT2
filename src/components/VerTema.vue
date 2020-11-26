@@ -1,11 +1,11 @@
 <template>
   <div class="jumbotron">
-    <h3><b>{{ tema.titulo }}</b></h3>
+    <h3><b>{{ temaActual.titulo }}</b></h3>
     &nbsp;
-    <p><u>Fecha de creación:</u> {{ formatearFechaHora(tema.createdAt) }}</p>
-    <p><u>Creador:</u> <b>{{ tema.usuario }}</b></p>
+    <p><u>Fecha de creación:</u> {{ formatearFechaHora(temaActual.createdAt) }}</p>
+    <p><u>Creador:</u> <b>{{ temaActual.usuario }}</b></p>
     <div align="center">
-      <h3>"{{ tema.descripcion }}"</h3>
+      <h3>"{{ temaActual.descripcion }}"</h3>
     </div>
     &nbsp;
     &nbsp;
@@ -76,6 +76,7 @@
 
 <script>
   import filters from '../filters'
+  import mixinsGlobal from '../mixinsGlobal.js'
   import VerComentario from './VerComentario'
   import { required, minLength, maxLength} from '@vuelidate/validators'
   import { reactive } from 'vue'
@@ -84,7 +85,7 @@
   export default  {
     name: 'src-components-ver-tema',
     props: ['temaID'],
-    mixins: [filters],
+    mixins: [filters, mixinsGlobal],
     components : {
       VerComentario
     },
@@ -111,36 +112,17 @@
     },
     data () {
       return {
-        temas: [],
-        tema: [],
-        verNewComentario: false,
-        urlTemas: 'https://5f92eb01eca67c001640a201.mockapi.io/temas/',
-        urlComentarios: 'https://5f92eb01eca67c001640a201.mockapi.io/comentarios'
+        verNewComentario: false  
       }
     },
     methods: {
       /* Pedido de datos almacenados en MockAPI */
       async getTemaFormAxios() {
-        try {
-          let res = await this.axios(this.urlTemas)
-          console.log(res.data)
-          this.temas = res.data
-          this.tema = this.temas[this.temaID-1]
-          console.log(this.tema)
-        } catch(error) {
-          console.log('HTTP GET ERROR', error)
-        }
+        this.$store.dispatch('getTemaAxios', this.temaID)
       },
       /* Envio de datos del formulario al backend */
       async sendDatosFormAxios(datos) {
-        try {
-          let res = await this.axios.post(this.urlComentarios, datos, {'content-type': 'application/json'})
-          this.$store.dispatch('agregarComentario', res.data)
-          console.log(res.data)
-        }
-        catch(error) {
-          console.log('HTTP POST ERROR', error)
-        }
+        this.$store.dispatch('postComentarioAxios', datos)
       },
       /* Envío del formulario */
       async enviar() {

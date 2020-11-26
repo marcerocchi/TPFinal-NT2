@@ -129,15 +129,9 @@
       }
     },
     methods: {
-      /* Envio de datos del formulario al backend */
+      /* Envio de datos del formulario al MockAPI */
       async sendDatosFormAxios(datos) {
-        try {
-          let res = await this.axios.post(this.url, datos, {'content-type': 'application/json'})
-          console.log(res.data)
-        }
-        catch(error) {
-          console.log('HTTP POST ERROR', error)
-        }
+        this.$store.dispatch('postTemaAxios', datos)
       },
       /* Envío del formulario */
       async enviar() {

@@ -183,32 +183,17 @@
     },    
     data () {
       return {
-        usuarios: [],
-        usuarioValido: undefined,
-        url : 'https://5f92eb01eca67c001640a201.mockapi.io/usuarios'
+        usuarioValido: undefined
       }
     },
     methods: {
-      /* Envio de datos del formulario al backend */
+      /* Envio de datos del formulario a MockAPI */
       async sendDatosFormAxios(datos) {
-        try {
-          let res = await this.axios.post(this.url, datos, {'content-type': 'application/json'})
-          console.log(res.data)
-        }
-        catch(error) {
-          console.log('HTTP POST ERROR', error)
-        }
+        this.$store.dispatch('postUsuarioAxios', datos)
       },
+      /* Pedido de datos almacenados en MockAPI */
       async getUsuariosFormAxios() {
-        try {
-          let res = await this.axios(this.url)
-          this.usuarios = res.data
-          this.$store.dispatch('guardarUsuarios', this.usuarios)
-          console.log(this.usuarios)
-        }
-        catch(error) {
-          console.log('HTTP GET ERROR', error)
-        }
+        this.$store.dispatch('getUsuariosAxios')
       },
       /* Envío del formulario */
       async enviar() {
@@ -229,12 +214,12 @@
         }
       },
       validarUsuario(value) {
-      const usuarios = this.$store.state.usuarios
-      console.log(usuarios)
-      const usuario = usuarios.filter(user => (user.usuario == value))
-      console.log(usuario)
-      if (usuario.length==0) return true
-      else return false
+        const usuarios = this.$store.state.usuarios
+        console.log(usuarios)
+        const usuario = usuarios.filter(user => (user.usuario == value))
+        console.log(usuario)
+        if (usuario.length==0) return true
+        else return false
       },
       /* Cancelar la creación de un nuevo usuario */
       cancelar() {

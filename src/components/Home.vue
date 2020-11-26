@@ -16,7 +16,7 @@
       v-model="criterioDeBusqueda"
     >
     <br>
-    <div v-if="temas.length">
+    <div v-if="listaTemas.length">
       <table class="table">
         <thead class="thead-dark">
           <tr :style="{color:'NAVY'}">
@@ -35,8 +35,8 @@
         </tr>
       </table>
     </div>
-    <div v-if ="!temas.length && !pidiendo" class="alert alert-warning"> <h5>No hay temas de discusión creados</h5> </div>
-    <div v-if="!temasFiltrados.length && !pidiendo && temas.length" class="alert alert-warning"> <h5>No hay coincidencias</h5> </div>
+    <div v-if ="!listaTemas.length && !pidiendoTemas" class="alert alert-warning"> <h5>No hay temas de discusión creados</h5> </div>
+    <div v-if="!temasFiltrados.length && !pidiendoTemas && listaTemas.length" class="alert alert-warning"> <h5>No hay coincidencias</h5> </div>
     <div class="footer-copyright text-center py-3">© 2020 Copyright: Diego Chiaradia
       , Paulina Sigal, Federico Camelino, Nicolas Meller, Marcelo Rocchi
     </div>
@@ -45,29 +45,35 @@
 
 <script>
   import filters from '../filters'
+  import mixinsGlobal from '../mixinsGlobal.js'
 
   export default  {
     name: 'src-components-home',
     components: {
     },
     props: [],
-    mixins: [filters],
+    mixins: [filters, mixinsGlobal],
     mounted () {
       this.getTemasFormAxios()
     },
     data () {
       return {
-        temas: [],
-        pidiendo: true,
-        criterioDeBusqueda: '',
-        url: 'https://5f92eb01eca67c001640a201.mockapi.io/temas'
+        criterioDeBusqueda: ''
       }
     },
     methods: {
+      /* Pedido de datos almacenados en MockAPI */
+      async getTemasFormAxios() {
+        this.$store.dispatch('getTemasAxios')
+      },
+
+      /* Botón Crear tema */
       crearTema() {
         this.$router.push({ path: '/creartema' })
-        console.log("Entro al crear tema")
+        //console.log("Entro al crear tema")
       },
+
+      /* Routear tema según ID */
       verTema(id) {
         this.$router.push({
           name: 'VerTema',
@@ -76,26 +82,13 @@
           }
         })
         console.log(id)
-      },
-      /* Pedido de datos almacenados en MockAPI */
-      async getTemasFormAxios() {
-        try {
-          let res = await this.axios(this.url)
-          this.temas = res.data
-          console.log(res.data)
-        } 
-        catch(error) {
-          console.log('HTTP GET ERROR', error)
-        }
-        finally {
-          this.pidiendo = false
-        }
-      },
+      }
     },
     computed: {
+      /* Filtrado de temas según los datos ingresados en la barra de búsqueda */
       temasFiltrados() {
-        return this.temas.filter((tema) => {
-          this.pidiendo = false
+        return this.$store.state.temas.filter((tema) => {
+          this.$store.state.pidiendoTema = false
           return tema.titulo.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase())
         });
       }

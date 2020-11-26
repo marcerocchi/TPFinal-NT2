@@ -1,5 +1,6 @@
 export default {
     computed: {
+        /* USUARIO */
         mostrarUsuario() {
             return this.$store.state.user
         },
@@ -12,9 +13,28 @@ export default {
         mostrarAvatar() {
             return this.$store.state.avatar
         },
+        listaUsuarios() {
+            return this.$store.state.usuarios
+        },
+        
+        /* TEMAS */
+        listaTemas() {
+            return this.$store.state.temas
+        },
+        temaActual() {
+            return this.$store.state.tema
+        },
+        pidiendoTemas() {
+            return this.$store.state.pidiendoTema
+        },
+
+        /* COMENTARIOS */
         listaComentarios() {
             return this.$store.state.comentarios
-        }
+        },
+        pidiendoComentarios() {
+            return this.$store.state.pidiendoComentario
+        },
 
     }
 }

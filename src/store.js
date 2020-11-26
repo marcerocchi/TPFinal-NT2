@@ -1,4 +1,9 @@
 import { createStore } from 'vuex'
+import axios from 'axios'
+
+const urlTemas = 'https://5f92eb01eca67c001640a201.mockapi.io/temas/'
+const urlUsers = 'https://5f92eb01eca67c001640a201.mockapi.io/usuarios/'
+const urlComentarios = 'https://5f92eb01eca67c001640a201.mockapi.io/comentarios/'
 
 export default createStore({
     state() {
@@ -9,10 +14,15 @@ export default createStore({
             lastName: '',
             avatar: '',
             usuarios: [],
-            comentarios: []
+            temas: [],
+            tema: [],
+            comentarios: [],
+            pidiendoTema: true,
+            pidiendoComentario: true
         }
     },
     actions: {
+        /* ACCIONES SINCRÓNICAS */
         userActual({commit}, usuario) {
             commit('definirUser', usuario)
         },
@@ -31,6 +41,18 @@ export default createStore({
         guardarUsuarios({commit}, usuarios) {
             commit('guardarUsuarios', usuarios)
         },
+        agregarUsuario({commit}, usuario) {
+            commit('agregarUsuario', usuario)
+        },
+        guardarTemas({commit}, temas) {
+            commit('guardarTemas', temas)
+        },
+        guardarTemaActual({commit}, tema) {
+            commit ('guardarTema', tema)
+        },
+        agregarTema({commit}, tema) {
+            commit('agregarTema', tema)
+        },
         guardarComentarios({commit}, comentarios) {
             commit('guardarComentarios', comentarios)
         },
@@ -39,6 +61,96 @@ export default createStore({
         },
         borrarComentario({commit}, id) {
             commit('borrarComentario', id)
+        },
+
+        /* ACCIONES ASINCRÓNICAS */
+        async getTemasAxios({commit}) {
+            try {
+                let res = await axios(urlTemas)
+                console.log(res.data)
+                commit('guardarTemas', res.data)
+            } 
+            catch(error) {
+                console.log('HTTP GET ERROR', error)
+            }
+            finally {
+                this.state.pidiendoTema = false
+            }
+        },
+        async getTemaAxios({commit}, temaID) {
+            try {
+                let res = await axios(urlTemas)
+                console.log(res.data)
+                commit('guardarTemaActual', res.data[temaID-1])
+                console.log(res.data[temaID-1])
+            } 
+            catch(error) {
+                console.log('HTTP GET ERROR', error)
+            }
+        },
+        async getUsuariosAxios({commit}) {
+            try {
+                let res = await axios(urlUsers)
+                console.log(res.data)
+                commit('guardarUsuarios', res.data)
+            }
+            catch(error) {
+                console.log('HTTP GET ERROR', error)
+            }
+        },
+        async getComentariosAxios({commit}, temaID) {
+            try {
+                let res = await axios(urlComentarios)
+                const comments = res.data.filter(valor => valor.idTema == temaID)
+                console.log(comments)
+                commit('guardarComentarios', comments)
+            }
+            catch(error) {
+                console.log('HTTP GET ERROR', error)
+            }
+            finally {
+                this.state.pidiendoComentario = false
+            }
+
+        },
+        async postTemaAxios({commit}, tema) {
+            try {
+                let res = await axios.post(urlTemas, tema, {'content-type': 'application/json'})
+                console.log(res.data)
+                commit('agregarTema', res.data)
+            }
+            catch(error) {
+                console.log('HTTP POST ERROR', error)
+            }
+        },
+        async postUsuarioAxios({commit}, usuario) {
+            try {
+                let res = await axios.post(urlUsers, usuario, {'content-type': 'application/json'})
+                console.log(res.data)
+                commit('agregarUsuario', res.data)
+            }
+            catch(error) {
+                console.log('HTTP POST ERROR', error)
+            }
+        },
+        async postComentarioAxios({commit}, comentario) {
+            try {
+                let res = await axios.post(urlComentarios, comentario, {'content-type': 'application/json'})
+                console.log(res.data)
+                commit('agregarComentario', res.data)
+            }
+            catch(error) {
+                console.log('HTTP POST ERROR', error)
+            }
+        },
+        deleteComentarioAxios({commit}, id) {
+            axios.delete(urlComentarios+id)
+            .then(res => {
+                let comentario = res.data
+                console.log(comentario)
+                commit('borrarComentario', id)
+            })
+            .catch(error => console.log('HTTP DELETE ERROR', error))
         }
     },
     mutations: {
@@ -61,6 +173,18 @@ export default createStore({
         },
         guardarUsuarios(state, usuarios) {
             state.usuarios = usuarios
+        },
+        agregarUsuario(state, usuario) {
+            state.usuarios.push(usuario)
+        },
+        guardarTemas(state, temas) {
+            state.temas = temas
+        },
+        guardarTemaActual(state, tema) {
+            state.tema = tema
+        },
+        agregarTema(state, tema) {
+            state.temas.push(tema)
         },
         guardarComentarios(state, comentarios) {
             state.comentarios = comentarios
