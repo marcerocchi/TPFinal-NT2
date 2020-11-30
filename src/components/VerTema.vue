@@ -14,9 +14,9 @@
     
     <div align="center">
       <button 
-      id="crearComentario" 
-      class="btn btn-secondary"
-      @click="verNewComentario = !verNewComentario"
+        id="crearComentario" 
+        class="btn btn-secondary"
+        @click="verNewComentario = !verNewComentario"
       >
       Comentar
       </button>

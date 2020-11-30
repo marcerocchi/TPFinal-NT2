@@ -146,6 +146,7 @@
       },
       /* Define el nombre de usuario tomándolo de la instancia global de Vuex */
       definirUsuario(user) {
+        this.$store.dispatch('idActual', user.id)
         this.$store.dispatch('userActual', user.usuario)
         this.$store.dispatch('nombreActual', user.nombre)
         this.$store.dispatch('apellidoActual', user.apellido)

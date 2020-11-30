@@ -9,6 +9,7 @@ export default createStore({
     state() {
         return {
             userLogueado: false,
+            id: '',
             user: '',
             name: '',
             lastName: '',
@@ -23,6 +24,9 @@ export default createStore({
     },
     actions: {
         /* ACCIONES SINCRÓNICAS */
+        idActual({commit}, id) {
+            commit('definirId', id)
+        },
         userActual({commit}, usuario) {
             commit('definirUser', usuario)
         },
@@ -143,6 +147,17 @@ export default createStore({
                 console.log('HTTP POST ERROR', error)
             }
         },
+        async putUsuarioAxios({commit}, imagen) {
+            const idUser = this.state.id
+            try {
+                commit('definirAvatar', imagen)
+                let res = await axios.put(urlUsers+idUser, this.state.usuarios[idUser-1], {'content-type':'application/json'})
+                console.log(res.data)
+            }
+            catch(error) {
+                console.log('HTTP PUT ERROR', error)
+            }
+        },
         deleteComentarioAxios({commit}, id) {
             axios.delete(urlComentarios+id)
             .then(res => {
@@ -154,6 +169,9 @@ export default createStore({
         }
     },
     mutations: {
+        definirId(state, id) {
+            state.id = id
+        },
         definirUser(state, usuario) {
             state.user = usuario
         },
@@ -165,6 +183,7 @@ export default createStore({
         },
         definirAvatar(state, imagen) {
             state.avatar = imagen
+            state.usuarios[state.id-1].avatar = imagen
         },
         accesoUsuario(state, login) {
             state.userLogueado = login
@@ -195,7 +214,11 @@ export default createStore({
         borrarComentario(state, id) {
             let offset = state.comentarios.findIndex(comentario => comentario.id == id)
             state.comentarios.splice(offset,1)
-        }
+        },
+        modificarAvatar(state) {
+            let offset = state.usuarios.findIndex(usuario => usuario.id == state.id)
+            state.usuarios.splice(offset,1,state.usuarios[state.id])
+        },
 
     }
 })
