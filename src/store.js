@@ -214,11 +214,6 @@ export default createStore({
         borrarComentario(state, id) {
             let offset = state.comentarios.findIndex(comentario => comentario.id == id)
             state.comentarios.splice(offset,1)
-        },
-        modificarAvatar(state) {
-            let offset = state.usuarios.findIndex(usuario => usuario.id == state.id)
-            state.usuarios.splice(offset,1,state.usuarios[state.id])
-        },
-
+        }
     }
 })
